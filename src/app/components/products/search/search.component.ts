@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [NgOptimizedImage,RouterLink],
+  imports: [NgOptimizedImage, RouterLink],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })

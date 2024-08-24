@@ -1,0 +1,96 @@
+@if(product){
+<div class="details">
+    <div class="product">
+        <div class="product__images">
+            <div class="product__images__images">
+                <div class="product__images__images__scroll">
+                    @for (image of product.images; track image) {
+                    <img [ngSrc]="image" width="104" height="104" loading="lazy" (click)="selectedImage = image">
+                    }
+                </div>
+            </div>
+            <div class="product__images__image">
+                <img [ngSrc]="selectedImage" width="452" height="460" loading="lazy">
+            </div>
+        </div>
+
+        <div class="product__details">
+            <p class="product__details__title">{{product.title}}</p>
+            <p class="product__details__model-number">
+                Model Number : CFI-1208A / CFI-1216A 01Y/CFI-1200A / CFI-1218A / CFI-1016A / CFI-1116A
+            </p>
+
+            <div class="product__details__rating">
+                <img class="product__details__rating__star" ngSrc="/assets/images/star.svg" width="7" height="7"
+                    loading="lazy">
+                <p><b>{{product.rating}}</b></p>
+                <p>(445)</p>
+            </div>
+
+            <div class="product__details__price">
+                <p>EGP <b>{{product.price}}</b></p>
+            </div>
+
+            <div class="product__details__free-delevary">
+                <p>Free Delivery by Tomorrow</p>
+                <b>Order in 6 hrs 46 mins</b>
+            </div>
+
+            <div class="product__details__monthly-payment">
+                <p>Monthly payment plans from EGP 778</p>
+                <a href="https://www.converted.in" target="_blank">View more details</a>
+            </div>
+
+            <div class="product__details__valu">
+                <img class="product__details__valu__image" ngSrc="/assets/images/valu.webp" width="70" height="70"
+                    loading="lazy">
+                <p>Pay 3 interest-free payments of EGP 9,333.33</p>
+            </div>
+
+            <div class="product__details__submit">
+                <div class="product__details__submit__qty">
+                    <p>QTY</p>
+                    <input type="number" min="1" value="1">
+                </div>
+                <button class="product__details__submit__add-to-cart">Add To Cart</button>
+            </div>
+        </div>
+
+        <div class="product__options">
+            <div class="product__options__option">
+                <img ngSrc="/assets/images/free-return.svg" width="35" height="35" loading="lazy">
+                <div>
+                    <b>FREE RETURNS</b>
+                    <p>Get free returns on eligible items</p>
+                </div>
+            </div>
+
+            <div class="product__options__option">
+                <img ngSrc="/assets/images/free-return.svg" width="35" height="35" loading="lazy">
+                <div>
+                    <b>TRUSTED SHIPPING</b>
+                    <p>Free shipping when you spend EGP 200 and above on express items</p>
+                </div>
+            </div>
+
+            <div class="product__options__option">
+                <img ngSrc="/assets/images/free-return.svg" width="35" height="35" loading="lazy">
+                <div>
+                    <b>SECURE SHOPPING</b>
+                    <p>Your data is always protected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="description">
+        <b>Overview</b>
+        <p>{{product.description}}</p>
+    </div>
+
+    <div class="highlights">
+        <b>Highlights</b>
+        <p>{{product.description}}</p>
+    </div>
+</div>
+}
