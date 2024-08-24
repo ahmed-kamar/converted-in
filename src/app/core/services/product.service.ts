@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../models/product.model';
+import { Product, ProductResponse } from '../models/product.model';
 import { Category } from '../models/category.model';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -16,24 +16,30 @@ export class ProductService {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/?limit=100`);
-  }
-
-  searchProducts(
+  getProducts(
     query?: string,
     category?: string,
     brand?: string,
     priceFrom?: number,
     priceTo?: number
   ): Observable<Product[]> {
-    const params = query ? new HttpParams().set('q', query) : new HttpParams();
+    let params = new HttpParams().set('limit', '100');
+
+    if (query) {
+      params = params.set('q', query);
+    }
 
     return this.http
-      .get<Product[]>(`${this.apiUrl}/search`, { params })
+      .get<ProductResponse>(`${this.apiUrl}/search`, { params })
       .pipe(
-        map((products) =>
-          this.filterProducts(products, category, brand, priceFrom, priceTo)
+        map((response) =>
+          this.filterProducts(
+            response.products,
+            category,
+            brand,
+            priceFrom,
+            priceTo
+          )
         )
       );
   }
