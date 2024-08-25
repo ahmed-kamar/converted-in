@@ -4,7 +4,7 @@
     margin-top: 30px;
 
     .menu {
-        width: 20vw;
+        width: 23vw;
         display: flex;
         flex-direction: column;
         gap: 36px;
@@ -83,6 +83,8 @@
             display: flex;
             flex-direction: column;
             gap: 27px;
+            width: 25vw;
+
 
             &__title {
                 font-size: 16px;
@@ -93,28 +95,37 @@
 
             &__price {
                 display: flex;
-                gap: 20px;
+                flex-wrap: wrap;
                 align-items: center;
 
-                p {
-                    font-size: 16px;
-                    font-weight: 600;
-                    line-height: 19.36px;
-                    color: #98A2B3;
-                }
+                gap: 20px;
 
-                input {
-                    border: solid 1px #D0D5DD;
-                    background-color: #fff;
-                    width: 80px;
-                    padding: 8px 12px;
-                    border-radius: 4px;
+                &__section {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
 
-                    &:focus {
-                        outline: none;
-                        box-shadow: none;
+                    p {
+                        font-size: 16px;
+                        font-weight: 600;
+                        line-height: 19.36px;
+                        color: #98A2B3;
+                    }
+
+                    input {
+                        border: solid 1px #D0D5DD;
+                        background-color: #fff;
+                        width: 80px;
+                        padding: 8px 12px;
+                        border-radius: 4px;
+
+                        &:focus {
+                            outline: none;
+                            box-shadow: none;
+                        }
                     }
                 }
+
             }
         }
 

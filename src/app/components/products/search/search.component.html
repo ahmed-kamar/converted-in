@@ -25,10 +25,14 @@
         <div class="menu__price">
             <p class="menu__price__title">Price Range (EGP)</p>
             <div class="menu__price__price">
-                <p>From</p>
-                <input placeholder="From">
-                <p>To</p>
-                <input placeholder="To">
+                <div class="menu__price__price__section">
+                    <p>From</p>
+                    <input placeholder="From">
+                </div>
+                <div class="menu__price__price__section">
+                    <p>To</p>
+                    <input placeholder="To">
+                </div>
             </div>
         </div>
 
@@ -70,7 +74,8 @@
         </div>
 
         <div class="product-search__paginator">
-            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="20" [totalRecords]="totalRecords" />
+            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="20"
+                [totalRecords]="totalRecords" />
         </div>
     </div>
 </div>
