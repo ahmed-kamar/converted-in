@@ -39,7 +39,8 @@
         <div class="menu__rating">
             <p class="menu__rating__title">Product Rating</p>
             <div class="menu__rating_rating">
-                <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="1" [max]="5" [step]="1" ariaLabel="Number" />
+                <p-slider [(ngModel)]="rangeRating" (onSlideEnd)="onRangeRatingChange()" [range]="true" [min]="1"
+                    [max]="5" [step]="1" ariaLabel="Number" />
                 <div class="menu__rating__rating__stars">
                     <p>1 Star</p>
                     <p>5 Stars</p>

@@ -27,16 +27,10 @@ export class SearchComponent {
   products: Product[] = [];
   categories: Category[] = [];
   selectedBrands = [];
-  rangeValues: number[] = [1, 5];
+  rangeRating: number[] = [1, 5];
 
   page: number = 1;
   totalRecords!: number;
-
-  onPageChange(event: PaginatorState) {
-    console.log(event);
-    this.page = (event.page as number) + 1;
-    this.getProducts();
-  }
 
   constructor(private productService: ProductService) {
     this.getProducts();
@@ -44,15 +38,27 @@ export class SearchComponent {
   }
 
   private getProducts() {
-    this.productService.getProducts(this.page).subscribe((data) => {
-      this.totalRecords = Math.min(data.limit, data.total);
-      this.products = data.products;
-    });
+    this.productService
+      .getProducts(this.page, this.rangeRating[0], this.rangeRating[1])
+      .subscribe((data) => {
+        this.totalRecords = data.total;
+        this.products = data.products;
+      });
   }
 
   getCategories() {
     this.productService.getCategories().subscribe((data) => {
       this.categories = data;
     });
+  }
+
+  onPageChange(event: PaginatorState) {
+    this.page = (event.page as number) + 1;
+    this.getProducts();
+  }
+
+  onRangeRatingChange() {
+    this.page = 1;
+    this.getProducts();
   }
 }

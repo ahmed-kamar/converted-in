@@ -18,6 +18,8 @@ export class ProductService {
 
   getProducts(
     page: number,
+    ratingFrom: number,
+    ratingTo: number,
     query?: string,
     category?: string,
     brand?: string,
@@ -29,36 +31,41 @@ export class ProductService {
     return this.http
       .get<ProductResponse>(`${this.apiUrl}/search`, { params })
       .pipe(
-        map((response) => ({
-          ...response, // Spread the existing properties (skip, total, limit)
-          products: this.filterProducts(
-            response.products,
+        map((response) =>
+          this.filterProductsRespone(
+            response,
             page,
+            ratingFrom,
+            ratingTo,
             query,
             category,
             brand,
             priceFrom,
             priceTo
-          ),
-        }))
+          )
+        )
       );
   }
 
-  private filterProducts(
-    products: Product[],
+  private filterProductsRespone(
+    productResponse: ProductResponse,
     page: number = 1,
+    ratingFrom: number,
+    ratingTo: number,
     query?: string,
     category?: string,
     brand?: string,
     priceFrom?: number,
     priceTo?: number
-  ): Product[] {
-    let filteredProducts = products.filter(
+  ): ProductResponse {
+    let filteredProducts = productResponse.products.filter(
       (product) =>
         (!category || product.category === category) &&
         (!brand || product.brand === brand) &&
         (priceFrom == null || product.price >= priceFrom) &&
-        (priceTo == null || product.price <= priceTo)
+        (priceTo == null || product.price <= priceTo) &&
+        (ratingFrom == null || product.rating >= ratingFrom) &&
+        (ratingTo == null || product.rating <= ratingTo)
     );
 
     if (query) {
@@ -70,11 +77,14 @@ export class ProductService {
       );
     }
 
+    productResponse.total = filteredProducts.length;
+
     const pageSize = 20;
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
 
-    return filteredProducts.slice(startIndex, endIndex);
+    productResponse.products = filteredProducts.slice(startIndex, endIndex);
+    return productResponse;
   }
 
   getCategories(): Observable<Category[]> {
