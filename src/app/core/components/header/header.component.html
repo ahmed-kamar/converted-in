@@ -1,1 +1,26 @@
-<p>header works!</p>
+<div class="header">
+    <div class="header__search">
+        <img class="header__search__logo" ngSrc="/assets/images/header-logo.svg" width="102" height="28" loading="lazy">
+        <div class="header__search__search">
+            <img ngSrc="/assets/images/header-search.svg" width="9" height="9" loading="lazy">
+            <input placeholder="Search for product">
+        </div>
+        <div class="header__search__cart-wishlist">
+            <div class="header__search__cart-wishlist__cart">
+                <img ngSrc="/assets/images/save.svg" width="19" height="19" loading="lazy">
+                <p>WishList</p>
+            </div>
+            <div class="header__search__cart-wishlist__cart">
+                <img ngSrc="/assets/images/cart.svg" width="19" height="19" loading="lazy">
+                <p>Cart</p>
+            </div>
+        </div>
+    </div>
+    <div class="header__categories">
+        <div class="header__categories__categories">
+            @for (category of categories; track category.name) {
+            <p>{{category.name}}</p>
+            }
+        </div>
+    </div>
+</div>

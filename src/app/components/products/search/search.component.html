@@ -3,25 +3,29 @@
 
     </div>
 
-    <div class="products">
-        @for (product of products; track product.id) {
-        <div class="products__product" [routerLink]="['/product', product.id]">
-            <img class="products__product__image" [ngSrc]="product.images[0]" width="193" height="182" loading="lazy">
-            <div class="products__product__details">
-                <p class="products__product__details__title">{{ product.title }}</p>
-                <div class="products__product__details__price-and-rating">
-                    <p class="products__product__details__price-and-rating__price">EGP <b>{{product.price}}</b></p>
-                    <div class="products__product__details__price-and-rating__rating">
-                        <img class="products__product__details__price-and-rating__rating__star"
-                            ngSrc="/assets/images/star.svg" width="7" height="7" loading="lazy">
-                        <p><b>{{product.rating}}</b></p>
-                        <p>(445)</p>
+    <div class="product-search">
+        <p class="product-search__results">136 Results for <b>"Electronics & Mobiles in Egypt"</b></p>
+        <div class="products">
+            @for (product of products; track product.id) {
+            <div class="products__product" [routerLink]="['/product', product.id]">
+                <img class="products__product__image" [ngSrc]="product.images[0]" width="193" height="182"
+                    loading="lazy">
+                <div class="products__product__details">
+                    <p class="products__product__details__title">{{ product.title }}</p>
+                    <div class="products__product__details__price-and-rating">
+                        <p class="products__product__details__price-and-rating__price">EGP <b>{{product.price}}</b></p>
+                        <div class="products__product__details__price-and-rating__rating">
+                            <img class="products__product__details__price-and-rating__rating__star"
+                                ngSrc="/assets/images/star.svg" width="7" height="7" loading="lazy">
+                            <p><b>{{product.rating}}</b></p>
+                            <p>(445)</p>
+                        </div>
                     </div>
                 </div>
             </div>
+            } @empty {
+            <p>There are no items.</p>
+            }
         </div>
-        } @empty {
-        <p>There are no items.</p>
-        }
     </div>
 </div>
