@@ -10,6 +10,7 @@ import { SliderModule } from 'primeng/slider';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Brand } from '../../../core/models/brand.modal';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 
 @Component({
   selector: 'app-search',
@@ -43,7 +44,8 @@ export class SearchComponent {
 
   constructor(
     private productService: ProductService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private breadcrumbService: BreadcrumbService
   ) {
     this.onQueryParamsChange();
     this.getProducts();
@@ -62,6 +64,7 @@ export class SearchComponent {
         } else {
           this.selectedCategory = undefined;
         }
+        this.breadcrumbService.toggleCategory(this.selectedCategory);
         this.onFilterChange();
       });
   }
@@ -102,6 +105,7 @@ export class SearchComponent {
     } else {
       this.selectedCategory = category;
     }
+    this.breadcrumbService.toggleCategory(this.selectedCategory);
     this.onFilterChange();
   }
 

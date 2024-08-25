@@ -1,0 +1,14 @@
+@if (breadcrumbService.breadcrumbItems && breadcrumbService.breadcrumbItems.length > 1) {
+<p-breadcrumb [model]="breadcrumbService.breadcrumbItems">
+    <ng-template pTemplate="item" let-item>
+        <a [routerLink]="item.route" [queryParams]="item.queryParams">
+            @if (item.icon) {
+            <img ngSrc="/assets/images/breadcramb-home.svg" width="13" height="13" loading="lazy">
+            }@else {
+            <span>{{ item.label }}</span>
+            }
+        </a>
+    </ng-template>
+    <ng-template pTemplate="separator"> / </ng-template>
+</p-breadcrumb>
+}
