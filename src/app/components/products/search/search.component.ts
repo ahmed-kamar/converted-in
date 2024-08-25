@@ -8,6 +8,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { Brand } from '../../../core/models/brand.modal';
 
 @Component({
   selector: 'app-search',
@@ -24,13 +25,15 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
   styleUrl: './search.component.scss',
 })
 export class SearchComponent {
-  products: Product[] = [];
-  categories: Category[] = [];
-  selectedBrands = [];
+  products!: Product[];
+  categories!: Category[];
+  brands!: Brand[];
+
+  selectedBrands!: string[];
   rangeRating: number[] = [1, 5];
 
   page: number = 1;
-  totalRecords!: number;
+  totalProducts!: number;
 
   constructor(private productService: ProductService) {
     this.getProducts();
@@ -39,10 +42,16 @@ export class SearchComponent {
 
   private getProducts() {
     this.productService
-      .getProducts(this.page, this.rangeRating[0], this.rangeRating[1])
+      .getProducts(
+        this.page,
+        this.rangeRating[0],
+        this.rangeRating[1],
+        this.selectedBrands
+      )
       .subscribe((data) => {
-        this.totalRecords = data.total;
+        this.totalProducts = data.total;
         this.products = data.products;
+        this.brands = data.brands;
       });
   }
 
@@ -58,6 +67,11 @@ export class SearchComponent {
   }
 
   onRangeRatingChange() {
+    this.page = 1;
+    this.getProducts();
+  }
+
+  onSelectBrandChange() {
     this.page = 1;
     this.getProducts();
   }

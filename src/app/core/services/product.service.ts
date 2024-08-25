@@ -3,6 +3,7 @@ import { Product, ProductResponse } from '../models/product.model';
 import { Category } from '../models/category.model';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Brand } from '../models/brand.modal';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,9 @@ export class ProductService {
     page: number,
     ratingFrom: number,
     ratingTo: number,
+    brand: string[],
     query?: string,
     category?: string,
-    brand?: string,
     priceFrom?: number,
     priceTo?: number
   ): Observable<ProductResponse> {
@@ -37,9 +38,9 @@ export class ProductService {
             page,
             ratingFrom,
             ratingTo,
+            brand,
             query,
             category,
-            brand,
             priceFrom,
             priceTo
           )
@@ -52,16 +53,18 @@ export class ProductService {
     page: number = 1,
     ratingFrom: number,
     ratingTo: number,
+    brand: string[],
     query?: string,
     category?: string,
-    brand?: string,
     priceFrom?: number,
     priceTo?: number
   ): ProductResponse {
+    productResponse.brands = this.getBrands(productResponse.products);
+
     let filteredProducts = productResponse.products.filter(
       (product) =>
-        (!category || product.category === category) &&
-        (!brand || product.brand === brand) &&
+        (!category || brand.length === 0 || product.category === category) &&
+        (!brand || brand.length === 0 || brand.includes(product.brand)) &&
         (priceFrom == null || product.price >= priceFrom) &&
         (priceTo == null || product.price <= priceTo) &&
         (ratingFrom == null || product.rating >= ratingFrom) &&
@@ -85,6 +88,25 @@ export class ProductService {
 
     productResponse.products = filteredProducts.slice(startIndex, endIndex);
     return productResponse;
+  }
+
+  private getBrands(products: Product[]): Brand[] {
+    const brandCounts = products.reduce<{ [key: string]: number }>(
+      (counts, product) => {
+        if (product.brand) {
+          counts[product.brand] = (counts[product.brand] || 0) + 1;
+        }
+        return counts;
+      },
+      {}
+    );
+
+    return Object.entries(brandCounts)
+      .filter(([name]) => name !== undefined)
+      .map(([name, count]) => ({
+        name,
+        count,
+      }));
   }
 
   getCategories(): Observable<Category[]> {

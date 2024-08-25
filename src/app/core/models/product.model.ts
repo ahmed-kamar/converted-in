@@ -1,3 +1,5 @@
+import { Brand } from './brand.modal';
+
 export interface Product {
   id: number;
   title: string;
@@ -43,4 +45,5 @@ export interface ProductResponse {
   products: Product[];
   skip: number;
   total: number;
+  brands: Brand[];
 }
