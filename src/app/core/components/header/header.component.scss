@@ -1,3 +1,5 @@
+@import '../../styles/responsive';
+
 .header {
     display: flex;
     flex-direction: column;
@@ -5,12 +7,21 @@
     top: 0;
     z-index: 2;
 
+    @include tablet {
+        position: unset;
+        top: unset;
+    }
+
     &__search {
         display: flex;
         justify-content: space-between;
         align-items: center;
         background-color: #002985;
         padding: 18px 48px;
+
+        @include tablet {
+            flex-direction: column;
+        }
 
         gap: 18px;
 

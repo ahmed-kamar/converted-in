@@ -22,7 +22,6 @@ export class BreadcrumbService {
           },
         ]
       : [];
-    console.log(categoryBreadcrumb);
 
     this.breadcrumbItems = [homeBreadcrumb, ...categoryBreadcrumb];
   }

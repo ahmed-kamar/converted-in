@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Category } from '../../../core/models/category.model';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
@@ -42,10 +42,13 @@ export class SearchComponent {
   page: number = 1;
   totalProducts!: number;
 
+  menuOpend: boolean = false;
+
   constructor(
     private productService: ProductService,
     private activatedRoute: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private router: Router
   ) {
     this.onQueryParamsChange();
     this.getProducts();
@@ -106,6 +109,17 @@ export class SearchComponent {
       this.selectedCategory = category;
     }
     this.breadcrumbService.toggleCategory(this.selectedCategory);
+
+    this.router.navigate([''], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        category: this.selectedCategory
+          ? JSON.stringify(this.selectedCategory)
+          : undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
+
     this.onFilterChange();
   }
 

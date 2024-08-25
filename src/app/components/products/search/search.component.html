@@ -1,5 +1,7 @@
 <div class="search">
-    <div class="menu">
+    <p class="search__menu-icon" (click)="menuOpend = true">☰</p>
+    <div class="menu" [ngClass]="{'mobile-opend-menu':menuOpend}">
+        <p class="menu__close-icon" (click)="menuOpend = false">x</p>
         @if(categories){
         <div class="menu__category">
             <p class="menu__category__title">Category</p>
@@ -56,6 +58,9 @@
             </div>
         </div>
     </div>
+
+    <div class="search__menu-overlay" [ngClass]="{'menu-overlay-opened':menuOpend}" (click)="menuOpend = false"></div>
+
 
     <div class="product-search">
         @if (totalProducts) {

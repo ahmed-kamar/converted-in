@@ -1,8 +1,15 @@
+@import '../../../core/styles/responsive';
+
+
 .details {
     display: flex;
     flex-direction: column;
     gap: 75px;
     margin-top: 60px;
+
+    @include tablet {
+        justify-content: center;
+    }
 
     .product {
         display: flex;
@@ -10,17 +17,30 @@
         gap: 25px;
         align-items: start;
 
+        @include tablet {
+            justify-content: center;
+        }
+
 
         &__images {
             display: flex;
             gap: 18px;
             max-width: 574px;
 
+            @include tablet {
+                flex-direction: column-reverse;
+            }
+
             img {
                 object-fit: contain;
             }
 
             &__images {
+                @include tablet {
+                    display: flex;
+                    justify-content: center;
+                }
+
                 &__scroll {
                     display: flex;
                     flex-direction: column;
@@ -29,6 +49,16 @@
                     overflow-y: auto;
                     height: 460px;
 
+                    @include tablet {
+                        overflow-y: unset;
+                        overflow-x: auto;
+
+                        width: 80vw;
+                        height: unset;
+                        flex-direction: row;
+                        justify-content: center;
+                    }
+
                     img {
                         cursor: pointer;
                     }
@@ -36,10 +66,18 @@
             }
 
             &__image {
+                @include tablet {
+                    align-self: center;
+                }
 
                 img {
-                    width: 452px;
+                    width: 400px;
                     height: 460px;
+
+                    @include tablet {
+                        width: 80vw;
+                        height: 300px;
+                    }
                 }
             }
         }
