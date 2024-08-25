@@ -22,10 +22,10 @@ export class ProductService {
     ratingFrom: number,
     ratingTo: number,
     brand: string[],
-    query?: string,
-    category?: string,
     priceFrom?: number,
-    priceTo?: number
+    priceTo?: number,
+    query?: string,
+    category?: string
   ): Observable<ProductResponse> {
     let params = new HttpParams().set('limit', '100');
 
@@ -39,10 +39,10 @@ export class ProductService {
             ratingFrom,
             ratingTo,
             brand,
-            query,
-            category,
             priceFrom,
-            priceTo
+            priceTo,
+            query,
+            category
           )
         )
       );
@@ -54,10 +54,10 @@ export class ProductService {
     ratingFrom: number,
     ratingTo: number,
     brand: string[],
-    query?: string,
-    category?: string,
     priceFrom?: number,
-    priceTo?: number
+    priceTo?: number,
+    query?: string,
+    category?: string
   ): ProductResponse {
     productResponse.brands = this.getBrands(productResponse.products);
 
@@ -65,10 +65,10 @@ export class ProductService {
       (product) =>
         (!category || brand.length === 0 || product.category === category) &&
         (!brand || brand.length === 0 || brand.includes(product.brand)) &&
-        (priceFrom == null || product.price >= priceFrom) &&
-        (priceTo == null || product.price <= priceTo) &&
-        (ratingFrom == null || product.rating >= ratingFrom) &&
-        (ratingTo == null || product.rating <= ratingTo)
+        (!priceFrom || product.price >= priceFrom) &&
+        (!priceTo || product.price <= priceTo) &&
+        (!ratingFrom || product.rating >= ratingFrom) &&
+        (!ratingTo || product.rating <= ratingTo)
     );
 
     if (query) {

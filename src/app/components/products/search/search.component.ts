@@ -31,6 +31,8 @@ export class SearchComponent {
 
   selectedBrands!: string[];
   rangeRating: number[] = [1, 5];
+  priceFrom!: number;
+  priceTo!: number;
 
   page: number = 1;
   totalProducts!: number;
@@ -46,7 +48,9 @@ export class SearchComponent {
         this.page,
         this.rangeRating[0],
         this.rangeRating[1],
-        this.selectedBrands
+        this.selectedBrands,
+        this.priceFrom,
+        this.priceTo
       )
       .subscribe((data) => {
         this.totalProducts = data.total;
@@ -66,12 +70,17 @@ export class SearchComponent {
     this.getProducts();
   }
 
-  onRangeRatingChange() {
+  onPriceRangeChange() {
     this.page = 1;
     this.getProducts();
   }
 
   onSelectBrandChange() {
+    this.page = 1;
+    this.getProducts();
+  }
+
+  onRangeRatingChange() {
     this.page = 1;
     this.getProducts();
   }

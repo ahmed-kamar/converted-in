@@ -32,11 +32,11 @@
             <div class="menu__price__price">
                 <div class="menu__price__price__section">
                     <p>From</p>
-                    <input placeholder="From">
+                    <input placeholder="From" [(ngModel)]="priceFrom" min="0" (change)="onPriceRangeChange()">
                 </div>
                 <div class="menu__price__price__section">
                     <p>To</p>
-                    <input placeholder="To">
+                    <input placeholder="To" [(ngModel)]="priceTo" min="1" (change)="onPriceRangeChange()">
                 </div>
             </div>
         </div>
