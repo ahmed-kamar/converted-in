@@ -42,7 +42,7 @@
                 <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="1" [max]="5" [step]="1" ariaLabel="Number" />
                 <div class="menu__rating__rating__stars">
                     <p>1 Star</p>
-                    <p>5 Star</p>
+                    <p>5 Stars</p>
                 </div>
             </div>
         </div>
@@ -74,8 +74,7 @@
         </div>
 
         <div class="product-search__paginator">
-            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="20"
-                [totalRecords]="totalRecords" />
+            <p-paginator (onPageChange)="onPageChange($event)" [rows]="20" [totalRecords]="totalRecords" />
         </div>
     </div>
 </div>

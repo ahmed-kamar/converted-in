@@ -29,13 +29,13 @@ export class SearchComponent {
   selectedBrands = [];
   rangeValues: number[] = [1, 5];
 
-  first: number = 0;
-  totalRecords: number = 120;
-  
+  page: number = 1;
+  totalRecords!: number;
+
   onPageChange(event: PaginatorState) {
     console.log(event);
-
-    this.first = event.first as number;
+    this.page = (event.page as number) + 1;
+    this.getProducts();
   }
 
   constructor(private productService: ProductService) {
@@ -44,8 +44,9 @@ export class SearchComponent {
   }
 
   private getProducts() {
-    this.productService.getProducts().subscribe((data) => {
-      this.products = data;
+    this.productService.getProducts(this.page).subscribe((data) => {
+      this.totalRecords = Math.min(data.limit, data.total);
+      this.products = data.products;
     });
   }
 
