@@ -1,9 +1,168 @@
 .search {
     display: flex;
-    gap: 70px;
+    gap: 30px;
 
     .menu {
-        width: 300px;
+        width: 20vw;
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+
+        &__category {
+            display: flex;
+            flex-direction: column;
+            gap: 27px;
+
+            &__title {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 19.36px;
+                color: #1D2939;
+            }
+
+            &__categories {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                max-height: 344px;
+                overflow: hidden;
+                overflow-y: auto;
+
+                p {
+                    font-size: 16px;
+                    font-weight: 400;
+                    color: #344054;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &__brand {
+            display: flex;
+            flex-direction: column;
+            gap: 27px;
+
+            &__title {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 19.36px;
+                color: #1D2939;
+            }
+
+            &__brands {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                max-height: 344px;
+                overflow: hidden;
+                overflow-y: auto;
+
+                &__with-numbers {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    p {
+                        background-color: #F9FAFB;
+                        border-radius: 16px;
+                        border: solid 1px #EAECF0;
+                        padding: 2px 8px;
+                    }
+                }
+            }
+        }
+
+        &__price {
+            display: flex;
+            flex-direction: column;
+            gap: 27px;
+
+            &__title {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 19.36px;
+                color: #1D2939;
+            }
+
+            &__price {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+
+                p {
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 19.36px;
+                    color: #98A2B3;
+                }
+
+                input {
+                    border: solid 1px #D0D5DD;
+                    background-color: #fff;
+                    width: 80px;
+                    padding: 8px 12px;
+                    border-radius: 4px;
+
+                    &:focus {
+                        outline: none;
+                        box-shadow: none;
+                    }
+                }
+            }
+        }
+
+
+        &__rating {
+            display: flex;
+            flex-direction: column;
+            gap: 27px;
+
+            &__title {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 19.36px;
+                color: #1D2939;
+            }
+
+            &__rating__stars {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 14px;
+
+                p {
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 19.36px;
+                    color: #98A2B3;
+                }
+            }
+
+            // &__price {
+            //     display: flex;
+            //     gap: 20px;
+            //     align-items: center;
+
+            //     p {
+            //         font-size: 16px;
+            //         font-weight: 600;
+            //         line-height: 19.36px;
+            //         color: #98A2B3;
+            //     }
+
+            //     input {
+            //         border: solid 1px #D0D5DD;
+            //         background-color: #fff;
+            //         width: 80px;
+            //         padding: 8px 12px;
+            //         border-radius: 4px;
+
+            //         &:focus {
+            //             outline: none;
+            //             box-shadow: none;
+            //         }
+            //     }
+            // }
+        }
     }
 
     .product-search {
@@ -25,8 +184,9 @@
         }
 
         .products {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 24px;
 
             &__product {
@@ -34,6 +194,7 @@
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
+                width: 182px;
 
                 &__image,
                 &__details {

@@ -1,6 +1,47 @@
 <div class="search">
     <div class="menu">
+        <div class="menu__category">
+            <p class="menu__category__title">Category</p>
+            <div class="menu__category__categories">
+                @for (category of categories; track category.name) {
+                <p>{{category.name}}</p>
+                }
+            </div>
+        </div>
 
+        <div class="menu__brand">
+            <p class="menu__brand__title">Brand</p>
+            <div class="menu__brand__brands">
+                @for (category of categories; track category.name) {
+                <div class="menu__brand__brands__with-numbers">
+                    <p-checkbox [(ngModel)]="selectedBrands" [label]="category.name" name="group"
+                        [value]="category.name" />
+                    <p>20</p>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="menu__price">
+            <p class="menu__price__title">Price Range (EGP)</p>
+            <div class="menu__price__price">
+                <p>From</p>
+                <input placeholder="From">
+                <p>To</p>
+                <input placeholder="To">
+            </div>
+        </div>
+
+        <div class="menu__rating">
+            <p class="menu__rating__title">Product Rating</p>
+            <div class="menu__rating_rating">
+                <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="1" [max]="5" [step]="1" ariaLabel="Number" />
+                <div class="menu__rating__rating__stars">
+                    <p>1 Star</p>
+                    <p>5 Star</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="product-search">
