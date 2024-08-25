@@ -68,5 +68,9 @@
             <p>There are no items.</p>
             }
         </div>
+
+        <div class="product-search__paginator">
+            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="20" [totalRecords]="totalRecords" />
+        </div>
     </div>
 </div>

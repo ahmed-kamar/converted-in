@@ -279,5 +279,28 @@
 
             }
         }
+
+        &__paginator {
+            display: flex;
+            justify-content: center;
+
+            ::ng-deep {
+                .p-paginator {
+                    border: solid 1px #D0D5DD;
+                    padding: 0;
+                }
+
+                .p-paginator-page,
+                .p-paginator-next,
+                .p-paginator-last,
+                .p-paginator-first,
+                .p-paginator-prev,
+                .p-paginator-current {
+                    border-radius: unset !important;
+                    margin: unset;
+                    border: solid 1px #D0D5DD;
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ import { Category } from '../../../core/models/category.model';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 @Component({
   selector: 'app-search',
@@ -28,6 +28,15 @@ export class SearchComponent {
   categories: Category[] = [];
   selectedBrands = [];
   rangeValues: number[] = [1, 5];
+
+  first: number = 0;
+  totalRecords: number = 120;
+  
+  onPageChange(event: PaginatorState) {
+    console.log(event);
+
+    this.first = event.first as number;
+  }
 
   constructor(private productService: ProductService) {
     this.getProducts();
