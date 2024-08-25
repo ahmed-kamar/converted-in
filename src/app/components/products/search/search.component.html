@@ -91,7 +91,7 @@
         </div>
         }
 
-        @if (products && products.length > 20){
+        @if (products && totalProducts > 20){
         <div class="product-search__paginator">
             <p-paginator (onPageChange)="onPageChange($event)" [rows]="20" [totalRecords]="totalProducts" />
         </div>

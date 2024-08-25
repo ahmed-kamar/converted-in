@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Category } from '../../../core/models/category.model';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Brand } from '../../../core/models/brand.modal';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search',
@@ -32,6 +33,7 @@ export class SearchComponent {
 
   selectedBrands!: string[];
   selectedCategory!: Category | undefined;
+  searchKeyword: string = '';
   rangeRating: number[] = [1, 5];
   priceFrom!: number;
   priceTo!: number;
@@ -39,9 +41,29 @@ export class SearchComponent {
   page: number = 1;
   totalProducts!: number;
 
-  constructor(private productService: ProductService) {
+  constructor(
+    private productService: ProductService,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.onQueryParamsChange();
     this.getProducts();
     this.getCategories();
+  }
+
+  onQueryParamsChange() {
+    this.activatedRoute.queryParams
+      .pipe(takeUntilDestroyed())
+      .subscribe((params) => {
+        this.searchKeyword = params['searchKeyword'];
+
+        const category = params['category'];
+        if (category) {
+          this.selectedCategory = JSON.parse(category);
+        } else {
+          this.selectedCategory = undefined;
+        }
+        this.onFilterChange();
+      });
   }
 
   private getProducts() {
@@ -53,7 +75,8 @@ export class SearchComponent {
         this.selectedBrands,
         this.priceFrom,
         this.priceTo,
-        this.selectedCategory?.slug
+        this.selectedCategory?.slug,
+        this.searchKeyword
       )
       .subscribe((data) => {
         this.totalProducts = data.total;

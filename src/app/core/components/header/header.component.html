@@ -2,8 +2,9 @@
     <div class="header__search">
         <img class="header__search__logo" ngSrc="/assets/images/header-logo.svg" width="102" height="28" loading="lazy">
         <div class="header__search__search">
-            <img ngSrc="/assets/images/header-search.svg" width="9" height="9" loading="lazy">
-            <input placeholder="Search for product">
+            <img ngSrc="/assets/images/header-search.svg" width="9" height="9" loading="lazy"
+                (click)="updateQueryParams()">
+            <input placeholder="Search for product" [(ngModel)]="searchKeyword" (keyup.enter)="updateQueryParams()">
         </div>
         <div class="header__search__cart-wishlist">
             <div class="header__search__cart-wishlist__cart">
@@ -19,7 +20,7 @@
     <div class="header__categories">
         <div class="header__categories__categories">
             @for (category of categories; track category.name) {
-            <p>{{category.name}}</p>
+            <p (click)="onSelectCategory(category)">{{category.name}}</p>
             }
         </div>
     </div>

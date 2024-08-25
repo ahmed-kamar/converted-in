@@ -25,7 +25,7 @@ export class ProductService {
     priceFrom?: number,
     priceTo?: number,
     category?: string,
-    query?: string,
+    keyword?: string
   ): Observable<ProductResponse> {
     let params = new HttpParams().set('limit', '100');
 
@@ -42,7 +42,7 @@ export class ProductService {
             priceFrom,
             priceTo,
             category,
-            query,
+            keyword
           )
         )
       );
@@ -57,7 +57,7 @@ export class ProductService {
     priceFrom?: number,
     priceTo?: number,
     category?: string,
-    query?: string,
+    keyword?: string
   ): ProductResponse {
     productResponse.brands = this.getBrands(productResponse.products);
 
@@ -71,8 +71,8 @@ export class ProductService {
         (!ratingTo || product.rating <= ratingTo)
     );
 
-    if (query) {
-      const lowerQuery = query.toLowerCase();
+    if (keyword && keyword.trim() !== '') {
+      const lowerQuery = keyword.toLowerCase();
       filteredProducts = filteredProducts.filter(
         (product) =>
           product.title.toLowerCase().includes(lowerQuery) ||
