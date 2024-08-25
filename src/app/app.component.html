@@ -1,4 +1,17 @@
 <app-header />
 <div class="app-container">
+    <p-breadcrumb [model]="items">
+        <ng-template pTemplate="item" let-item>
+            <a [routerLink]="item.route">
+                @if (item.icon) {
+                <img ngSrc="/assets/images/breadcramb-home.svg" width="13" height="13" loading="lazy">
+                }@else {
+                <span>{{ item.label }}</span>
+                }
+            </a>
+        </ng-template>
+        <ng-template pTemplate="separator"> / </ng-template>
+    </p-breadcrumb>
+
     <router-outlet />
 </div>

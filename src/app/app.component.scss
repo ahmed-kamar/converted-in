@@ -1,3 +1,25 @@
 .app-container {
     padding: 25px 45px;
+
+    ::ng-deep {
+        .p-breadcrumb {
+            background-color: unset;
+            border: unset;
+            padding: unset;
+        }
+
+        .p-menuitem-separator {
+            color: #D0D5DD;
+        }
+
+        .p-menuitem-link {
+            a {
+                text-decoration: unset;
+                font-size: 12.15px;
+                font-weight: 500;
+                line-height: 17.36px;
+                color: #475467;
+            }
+        }
+    }
 }

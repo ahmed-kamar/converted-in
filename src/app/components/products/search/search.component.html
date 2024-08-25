@@ -4,7 +4,7 @@
             <p class="menu__category__title">Category</p>
             <div class="menu__category__categories">
                 @for (category of categories; track category.name) {
-                <p>{{category.name}}</p>
+                <p class="menu__category__categories__selected">{{category.name}}</p>
                 }
             </div>
         </div>

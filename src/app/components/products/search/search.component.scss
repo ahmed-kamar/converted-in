@@ -1,6 +1,7 @@
 .search {
     display: flex;
     gap: 30px;
+    margin-top: 30px;
 
     .menu {
         width: 20vw;
@@ -27,12 +28,18 @@
                 max-height: 344px;
                 overflow: hidden;
                 overflow-y: auto;
+                border-left: solid 1px #EAECF0;
+                padding-left: 14px;
 
                 p {
                     font-size: 16px;
                     font-weight: 400;
                     color: #344054;
                     cursor: pointer;
+                }
+
+                &__selected {
+                    font-weight: 600 !important;
                 }
             }
         }
@@ -195,6 +202,7 @@
                 flex-direction: column;
                 gap: 5px;
                 width: 182px;
+                cursor: pointer;
 
                 &__image,
                 &__details {
