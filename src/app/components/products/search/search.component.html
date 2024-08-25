@@ -5,7 +5,10 @@
             <p class="menu__category__title">Category</p>
             <div class="menu__category__categories">
                 @for (category of categories; track category.name) {
-                <p class="menu__category__categories__selected">{{category.name}}</p>
+                <p [ngClass]="{'menu__category__categories__selected': selectedCategory && (selectedCategory.slug == category.slug)}"
+                    (click)="onSelectCategory(category)">
+                    {{category.name}}
+                </p>
                 }
             </div>
         </div>
@@ -18,7 +21,7 @@
                 @for (brand of brands; track brand.name) {
                 <div class="menu__brand__brands__with-numbers">
                     <p-checkbox [(ngModel)]="selectedBrands" [label]="brand.name" name="group" [value]="brand.name"
-                        (onChange)="onSelectBrandChange()" />
+                        (onChange)="onFilterChange()" />
                     <p>{{brand.count}}</p>
                 </div>
                 }
@@ -32,11 +35,11 @@
             <div class="menu__price__price">
                 <div class="menu__price__price__section">
                     <p>From</p>
-                    <input placeholder="From" [(ngModel)]="priceFrom" min="0" (change)="onPriceRangeChange()">
+                    <input placeholder="From" [(ngModel)]="priceFrom" min="0" (change)="onFilterChange()">
                 </div>
                 <div class="menu__price__price__section">
                     <p>To</p>
-                    <input placeholder="To" [(ngModel)]="priceTo" min="1" (change)="onPriceRangeChange()">
+                    <input placeholder="To" [(ngModel)]="priceTo" min="1" (change)="onFilterChange()">
                 </div>
             </div>
         </div>
@@ -44,8 +47,8 @@
         <div class="menu__rating">
             <p class="menu__rating__title">Product Rating</p>
             <div class="menu__rating_rating">
-                <p-slider [(ngModel)]="rangeRating" (onSlideEnd)="onRangeRatingChange()" [range]="true" [min]="1"
-                    [max]="5" [step]="1" ariaLabel="Number" />
+                <p-slider [(ngModel)]="rangeRating" (onSlideEnd)="onFilterChange()" [range]="true" [min]="1" [max]="5"
+                    [step]="1" ariaLabel="Number" />
                 <div class="menu__rating__rating__stars">
                     <p>1 Star</p>
                     <p>5 Stars</p>
@@ -56,7 +59,12 @@
 
     <div class="product-search">
         @if (totalProducts) {
-        <p class="product-search__results">{{totalProducts}} Results for <b>"Electronics & Mobiles in Egypt"</b></p>
+        <p class="product-search__results">
+            {{totalProducts}} Results
+            @if(selectedCategory){
+            for <b>"{{selectedCategory.name}}"</b>
+            }
+        </p>
         }
         @if (products){
         <div class="products">
@@ -83,7 +91,7 @@
         </div>
         }
 
-        @if (products && products.length > 0){
+        @if (products && products.length > 20){
         <div class="product-search__paginator">
             <p-paginator (onPageChange)="onPageChange($event)" [rows]="20" [totalRecords]="totalProducts" />
         </div>

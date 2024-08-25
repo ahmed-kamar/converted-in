@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
-import { NgOptimizedImage } from '@angular/common';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Category } from '../../../core/models/category.model';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -20,6 +20,7 @@ import { Brand } from '../../../core/models/brand.modal';
     CheckboxModule,
     SliderModule,
     PaginatorModule,
+    NgClass,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -30,6 +31,7 @@ export class SearchComponent {
   brands!: Brand[];
 
   selectedBrands!: string[];
+  selectedCategory!: Category | undefined;
   rangeRating: number[] = [1, 5];
   priceFrom!: number;
   priceTo!: number;
@@ -50,7 +52,8 @@ export class SearchComponent {
         this.rangeRating[1],
         this.selectedBrands,
         this.priceFrom,
-        this.priceTo
+        this.priceTo,
+        this.selectedCategory?.slug
       )
       .subscribe((data) => {
         this.totalProducts = data.total;
@@ -70,17 +73,16 @@ export class SearchComponent {
     this.getProducts();
   }
 
-  onPriceRangeChange() {
-    this.page = 1;
-    this.getProducts();
+  onSelectCategory(category: Category) {
+    if (category.slug === this.selectedCategory?.slug) {
+      this.selectedCategory = undefined;
+    } else {
+      this.selectedCategory = category;
+    }
+    this.onFilterChange();
   }
 
-  onSelectBrandChange() {
-    this.page = 1;
-    this.getProducts();
-  }
-
-  onRangeRatingChange() {
+  onFilterChange() {
     this.page = 1;
     this.getProducts();
   }

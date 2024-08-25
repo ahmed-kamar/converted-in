@@ -24,8 +24,8 @@ export class ProductService {
     brand: string[],
     priceFrom?: number,
     priceTo?: number,
+    category?: string,
     query?: string,
-    category?: string
   ): Observable<ProductResponse> {
     let params = new HttpParams().set('limit', '100');
 
@@ -41,8 +41,8 @@ export class ProductService {
             brand,
             priceFrom,
             priceTo,
+            category,
             query,
-            category
           )
         )
       );
@@ -56,14 +56,14 @@ export class ProductService {
     brand: string[],
     priceFrom?: number,
     priceTo?: number,
+    category?: string,
     query?: string,
-    category?: string
   ): ProductResponse {
     productResponse.brands = this.getBrands(productResponse.products);
 
     let filteredProducts = productResponse.products.filter(
       (product) =>
-        (!category || brand.length === 0 || product.category === category) &&
+        (!category || product.category === category) &&
         (!brand || brand.length === 0 || brand.includes(product.brand)) &&
         (!priceFrom || product.price >= priceFrom) &&
         (!priceTo || product.price <= priceTo) &&
