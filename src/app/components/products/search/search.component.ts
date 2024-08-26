@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
-import { NgClass, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgClass, NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Category } from '../../../core/models/category.model';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -11,6 +10,14 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Brand } from '../../../core/models/brand.modal';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { map, Observable, startWith, Subject, switchMap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import {
+  selectBrands,
+  selectCategories,
+  selectProducts,
+} from '../../../store/product/product.selectors';
+import { ProductService } from '../../../core/services/product.service';
 
 @Component({
   selector: 'app-search',
@@ -23,15 +30,12 @@ import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
     SliderModule,
     PaginatorModule,
     NgClass,
+    AsyncPipe,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
 export class SearchComponent {
-  products!: Product[];
-  categories!: Category[];
-  brands!: Brand[];
-
   selectedBrands!: string[];
   selectedCategory!: Category | undefined;
   searchKeyword: string = '';
@@ -39,23 +43,55 @@ export class SearchComponent {
   priceFrom!: number;
   priceTo!: number;
 
+  menuOpend: boolean = false;
+
+  products$!: Observable<Product[] | null>;
+  filteredProducts$!: Observable<Product[] | null>;
+  categories$!: Observable<Category[] | null>;
+  brands$!: Observable<Brand[] | null>;
+  private filterChanged$ = new Subject<void>();
+
   page: number = 1;
   totalProducts!: number;
 
-  menuOpend: boolean = false;
-
   constructor(
-    private productService: ProductService,
     private activatedRoute: ActivatedRoute,
     private breadcrumbService: BreadcrumbService,
-    private router: Router
+    private router: Router,
+    private store: Store,
+    private productService: ProductService
   ) {
+    this.initVariables();
     this.onQueryParamsChange();
-    this.getProducts();
-    this.getCategories();
   }
 
-  onQueryParamsChange() {
+  private initVariables() {
+    this.products$ = this.store.select(selectProducts);
+    this.categories$ = this.store.select(selectCategories);
+    this.brands$ = this.store.select(selectBrands);
+    this.filteredProducts$ = this.filterChanged$.pipe(
+      startWith(undefined),
+      switchMap(() => this.products$),
+      map((products) => {
+        const filteredProducts = this.productService.filterProducts(
+          products || [],
+          this.page,
+          this.rangeRating[0],
+          this.rangeRating[1],
+          this.selectedBrands,
+          this.priceFrom,
+          this.priceTo,
+          this.selectedCategory?.slug,
+          this.searchKeyword
+        );
+
+        this.totalProducts = filteredProducts.total;
+        return filteredProducts.products;
+      })
+    );
+  }
+
+  private onQueryParamsChange() {
     this.activatedRoute.queryParams
       .pipe(takeUntilDestroyed())
       .subscribe((params) => {
@@ -72,34 +108,9 @@ export class SearchComponent {
       });
   }
 
-  private getProducts() {
-    this.productService
-      .getProducts(
-        this.page,
-        this.rangeRating[0],
-        this.rangeRating[1],
-        this.selectedBrands,
-        this.priceFrom,
-        this.priceTo,
-        this.selectedCategory?.slug,
-        this.searchKeyword
-      )
-      .subscribe((data) => {
-        this.totalProducts = data.total;
-        this.products = data.products;
-        this.brands = data.brands;
-      });
-  }
-
-  getCategories() {
-    this.productService.getCategories().subscribe((data) => {
-      this.categories = data;
-    });
-  }
-
   onPageChange(event: PaginatorState) {
     this.page = (event.page as number) + 1;
-    this.getProducts();
+    this.filterChanged$.next();
   }
 
   onSelectCategory(category: Category) {
@@ -125,6 +136,6 @@ export class SearchComponent {
 
   onFilterChange() {
     this.page = 1;
-    this.getProducts();
+    this.filterChanged$.next();
   }
 }

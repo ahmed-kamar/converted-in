@@ -2,11 +2,11 @@
     <p class="search__menu-icon" (click)="menuOpend = true">☰</p>
     <div class="menu" [ngClass]="{'mobile-opend-menu':menuOpend}">
         <p class="menu__close-icon" (click)="menuOpend = false">x</p>
-        @if(categories){
+        @if(categories$){
         <div class="menu__category">
             <p class="menu__category__title">Category</p>
             <div class="menu__category__categories">
-                @for (category of categories; track category.name) {
+                @for (category of categories$ | async; track category.name) {
                 <p [ngClass]="{'menu__category__categories__selected': selectedCategory && (selectedCategory.slug == category.slug)}"
                     (click)="onSelectCategory(category)">
                     {{category.name}}
@@ -16,11 +16,11 @@
         </div>
         }
 
-        @if(brands){
+        @if(brands$){
         <div class="menu__brand">
             <p class="menu__brand__title">Brand</p>
             <div class="menu__brand__brands">
-                @for (brand of brands; track brand.name) {
+                @for (brand of brands$ | async; track brand.name) {
                 <div class="menu__brand__brands__with-numbers">
                     <p-checkbox [(ngModel)]="selectedBrands" [label]="brand.name" name="group" [value]="brand.name"
                         (onChange)="onFilterChange()" />
@@ -71,9 +71,9 @@
             }
         </p>
         }
-        @if (products){
+        @if (filteredProducts$){
         <div class="products">
-            @for (product of products; track product.id) {
+            @for (product of filteredProducts$ | async; track product.id) {
             <div class="products__product" [routerLink]="['/product', product.id]">
                 <img class="products__product__image" [ngSrc]="product.images[0]" width="193" height="182"
                     loading="lazy">
@@ -96,7 +96,7 @@
         </div>
         }
 
-        @if (products && totalProducts > 20){
+        @if (totalProducts > 20){
         <div class="product-search__paginator">
             <p-paginator (onPageChange)="onPageChange($event)" [rows]="20" [totalRecords]="totalProducts" />
         </div>

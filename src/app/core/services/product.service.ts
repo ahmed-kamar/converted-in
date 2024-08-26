@@ -4,20 +4,43 @@ import { Category } from '../models/category.model';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Brand } from '../models/brand.modal';
+import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   private apiUrl = 'https://dummyjson.com/products';
+  private readonly PRODUCTS_CACHE_KEY = 'products_cache';
+  private readonly CATEGORIES_CACHE_KEY = 'categories_cache';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cacheService: CacheService) {}
+
+  getProducts(): Observable<Product[]> {
+    return this.cacheService.fetchData<Product[]>(
+      this.PRODUCTS_CACHE_KEY,
+      () => {
+        const params = new HttpParams().set('limit', '100');
+        return this.http
+          .get<ProductResponse>(`${this.apiUrl}/search`, { params })
+          .pipe(map((response) => response.products));
+      }
+    );
+  }
+
+  getCategories(): Observable<Category[]> {
+    return this.cacheService.fetchData<Category[]>(
+      this.CATEGORIES_CACHE_KEY,
+      () => this.http.get<Category[]>(`${this.apiUrl}/categories`)
+    );
+  }
 
   getProduct(id: string): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  getProducts(
+  filterProducts(
+    products: Product[],
     page: number,
     ratingFrom: number,
     ratingTo: number,
@@ -26,42 +49,8 @@ export class ProductService {
     priceTo?: number,
     category?: string,
     keyword?: string
-  ): Observable<ProductResponse> {
-    let params = new HttpParams().set('limit', '100');
-
-    return this.http
-      .get<ProductResponse>(`${this.apiUrl}/search`, { params })
-      .pipe(
-        map((response) =>
-          this.filterProductsRespone(
-            response,
-            page,
-            ratingFrom,
-            ratingTo,
-            brand,
-            priceFrom,
-            priceTo,
-            category,
-            keyword
-          )
-        )
-      );
-  }
-
-  private filterProductsRespone(
-    productResponse: ProductResponse,
-    page: number = 1,
-    ratingFrom: number,
-    ratingTo: number,
-    brand: string[],
-    priceFrom?: number,
-    priceTo?: number,
-    category?: string,
-    keyword?: string
-  ): ProductResponse {
-    productResponse.brands = this.getBrands(productResponse.products);
-
-    let filteredProducts = productResponse.products.filter(
+  ): { products: Product[]; total: number } {
+    let filteredProducts = products.filter(
       (product) =>
         (!category || product.category === category) &&
         (!brand || brand.length === 0 || brand.includes(product.brand)) &&
@@ -80,36 +69,11 @@ export class ProductService {
       );
     }
 
-    productResponse.total = filteredProducts.length;
-
     const pageSize = 20;
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
 
-    productResponse.products = filteredProducts.slice(startIndex, endIndex);
-    return productResponse;
-  }
-
-  private getBrands(products: Product[]): Brand[] {
-    const brandCounts = products.reduce<{ [key: string]: number }>(
-      (counts, product) => {
-        if (product.brand) {
-          counts[product.brand] = (counts[product.brand] || 0) + 1;
-        }
-        return counts;
-      },
-      {}
-    );
-
-    return Object.entries(brandCounts)
-      .filter(([name]) => name !== undefined)
-      .map(([name, count]) => ({
-        name,
-        count,
-      }));
-  }
-
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.apiUrl}/categories`);
+    products = filteredProducts.slice(startIndex, endIndex);
+    return { products, total: filteredProducts.length };
   }
 }
