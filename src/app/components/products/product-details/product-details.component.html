@@ -1,4 +1,4 @@
-@if(product){
+@if(product$ | async; as product){
 <div class="details">
     <div class="product">
         <div class="product__images">
@@ -10,7 +10,9 @@
                 </div>
             </div>
             <div class="product__images__image">
+                @if(selectedImage){
                 <img [ngSrc]="selectedImage" width="452" height="460" loading="lazy">
+                }
             </div>
         </div>
 

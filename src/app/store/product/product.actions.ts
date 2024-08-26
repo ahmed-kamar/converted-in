@@ -13,6 +13,20 @@ export const loadProductsFailure = createAction(
   props<{ error: any }>()
 );
 
+// Actions for loading product details
+export const loadProduct = createAction(
+  '[Product] Load Product',
+  props<{ id: string }>()
+);
+export const loadProductSuccess = createAction(
+  '[Product] Load Product Success',
+  props<{ product: Product }>()
+);
+export const loadProductFailure = createAction(
+  '[Product] Load Product Failure',
+  props<{ error: any }>()
+);
+
 export const loadCategories = createAction('[Category] Load Categories');
 export const loadCategoriesSuccess = createAction(
   '[Category] Load Categories Success',

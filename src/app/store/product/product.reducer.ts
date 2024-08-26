@@ -6,6 +6,7 @@ import { Brand } from '../../core/models/brand.modal';
 
 export interface ProductState {
   products: Product[] | null;
+  product: Product | null;
   categories: Category[] | null;
   brands: Brand[] | null;
   error: any;
@@ -13,6 +14,7 @@ export interface ProductState {
 
 export const initialState: ProductState = {
   products: null,
+  product: null,
   categories: null,
   brands: null,
   error: null,
@@ -30,6 +32,17 @@ export const productReducer = createReducer(
     ...state,
     error,
   })),
+
+  on(ProductActions.loadProductSuccess, (state, { product }) => ({
+    ...state,
+    product,
+    error: null,
+  })),
+  on(ProductActions.loadProductFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
   on(ProductActions.loadCategoriesSuccess, (state, { categories }) => ({
     ...state,
     categories,

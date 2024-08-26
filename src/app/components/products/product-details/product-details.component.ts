@@ -1,46 +1,81 @@
-import { Component } from '@angular/core';
-import { ProductService } from '../../../core/services/product.service';
+import { Component, OnDestroy } from '@angular/core';
 import { Product } from '../../../core/models/product.model';
 import { ActivatedRoute } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { combineLatest, map, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import {
+  selectCategories,
+  selectProduct,
+} from '../../../store/product/product.selectors';
+import * as ProductActions from '../../../store/product/product.actions';
+import { Category } from '../../../core/models/category.model';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, AsyncPipe],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
 })
-export class ProductDetailsComponent {
-  product!: Product;
-  selectedImage!: string;
+export class ProductDetailsComponent implements OnDestroy {
+  product$!: Observable<Product | null>;
+  categories$: Observable<Category[] | null>;
+
+  selectedImage!: string | undefined;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private productService: ProductService,
+    private store: Store,
     private route: ActivatedRoute,
     private breadcrumbService: BreadcrumbService
   ) {
+    this.product$ = this.store.select(selectProduct);
+    this.categories$ = this.store.select(selectCategories);
     this.getProduct();
+    this.updateImageAndBreadcrumb();
   }
 
   private getProduct() {
-    const productId: string | null = this.route.snapshot.paramMap.get('id');
-    if (productId) {
-      this.productService.getProduct(productId).subscribe((data) => {
-        this.selectedImage = data?.images?.[0];
-        this.product = data;
-        this.getCategories();
-      });
+    const id: string | null = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.store.dispatch(ProductActions.loadProduct({ id }));
     }
   }
 
-  private getCategories() {
-    this.productService.getCategories().subscribe((data) => {
-      const category = data.find((c) => c.slug === this.product.category);
-      if (category) {
-        this.breadcrumbService.addProduct(category, this.product);
-      }
-    });
+  private updateImageAndBreadcrumb(): void {
+    const findCategory = (
+      product: Product | null,
+      categories: Category[] | null
+    ): Category | undefined => {
+      return product && categories
+        ? categories.find((c) => c.slug === product.category)
+        : undefined;
+    };
+
+    combineLatest([this.product$, this.categories$])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([product, categories]) => ({
+          product,
+          category: findCategory(product, categories),
+        })),
+        tap(({ product, category }) => {
+          if (product) {
+            this.selectedImage = product.images?.[0];
+          }
+          if (category && product) {
+            this.breadcrumbService.addProduct(category, product);
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
