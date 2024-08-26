@@ -12,6 +12,7 @@ import { CacheService } from './cache.service';
 export class ProductService {
   private apiUrl = 'https://dummyjson.com/products';
   private readonly PRODUCTS_CACHE_KEY = 'products_cache';
+  private readonly PRODUCT_CACHE_KEY = 'product_cache';
   private readonly CATEGORIES_CACHE_KEY = 'categories_cache';
 
   constructor(private http: HttpClient, private cacheService: CacheService) {}
@@ -36,7 +37,9 @@ export class ProductService {
   }
 
   getProduct(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+    return this.cacheService.fetchData<Product>(`${this.PRODUCT_CACHE_KEY}_${id}`, () =>
+      this.http.get<Product>(`${this.apiUrl}/${id}`)
+    );
   }
 
   filterProducts(

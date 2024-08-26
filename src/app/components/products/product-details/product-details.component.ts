@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Product } from '../../../core/models/product.model';
+import { Category } from '../../../core/models/category.model';
 import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
@@ -10,7 +11,6 @@ import {
   selectProduct,
 } from '../../../store/product/product.selectors';
 import * as ProductActions from '../../../store/product/product.actions';
-import { Category } from '../../../core/models/category.model';
 
 @Component({
   selector: 'app-product-details',
