@@ -11,17 +11,41 @@
                 <img ngSrc="/assets/images/save.svg" width="19" height="19" loading="lazy">
                 <p>WishList</p>
             </div>
-            <div class="header__search__cart-wishlist__cart">
+            <div class="header__search__cart-wishlist__cart" (click)="cartOverlay.toggle($event)">
                 <img ngSrc="/assets/images/cart.svg" width="19" height="19" loading="lazy">
                 <p>Cart</p>
             </div>
         </div>
     </div>
+    @if(categories$){
     <div class="header__categories">
         <div class="header__categories__categories">
-            @for (category of categories; track category.name) {
+            @for (category of categories$ | async; track category.name) {
             <p (click)="onSelectCategory(category)">{{category.name}}</p>
             }
         </div>
     </div>
+    }
 </div>
+
+
+
+<p-overlayPanel #cartOverlay [style]="{ width: '350px' }" [showCloseIcon]="true">
+    <ng-template pTemplate="content">
+        <div class="cart">
+            @for (cartItem of cartItems$ | async; track cartItem.product.id) {
+            <div class="cart__product">
+                <img [ngSrc]="cartItem.product.images[0]" width="100" height="100" loading="lazy">
+                <div class="cart__product__details">
+                    <p><b>Title:</b> {{cartItem.product.title}}</p>
+                    <p><b>Quantity:</b> {{cartItem.quantity}}</p>
+                    <button class="cart__product__details__delete" (click)="removeFromCart(+cartItem.product.id)">Remove</button>
+                </div>
+            </div>
+            }@empty {
+            <p>No products in cart</p>
+            }
+        </div>
+
+    </ng-template>
+</p-overlayPanel>

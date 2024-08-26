@@ -1,35 +1,44 @@
-import { NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 import { Category } from '../../models/category.model';
-import { ProductService } from '../../services/product.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { Observable } from 'rxjs';
+import { CartService } from '../../services/cart.service';
+import { Store } from '@ngrx/store';
+import { selectCartItems } from '../../../store/cart/cart.selectors';
+import { selectCategories } from '../../../store/product/product.selectors';
+import { CartItem } from '../../models/cart.model';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgOptimizedImage, FormsModule],
+  imports: [NgOptimizedImage, FormsModule, OverlayPanelModule, AsyncPipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  categories: Category[] = [];
+  cartItems$!: Observable<CartItem[] | null>;
+  categories$: Observable<Category[] | null>;
 
   searchKeyword: string = '';
   selectedCategory!: Category | undefined;
 
   constructor(
-    private productService: ProductService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private cartService: CartService,
+    private store: Store
   ) {
-    this.getCategories();
+    this.cartItems$ = this.store.select(selectCartItems);
+    this.categories$ = this.store.select(selectCategories);
+    this.cartService.loadCartFromLocalStorage();
   }
 
-  getCategories() {
-    this.productService.getCategories().subscribe((data) => {
-      this.categories = data;
-    });
+  removeFromCart(productId: number) {
+    this.cartService.removeFromCart(productId);
   }
 
   onSelectCategory(category: Category) {

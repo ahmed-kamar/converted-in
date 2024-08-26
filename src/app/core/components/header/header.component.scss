@@ -98,3 +98,41 @@
         }
     }
 }
+
+::ng-deep {
+    .cart {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        max-height: 310px;
+        overflow: hidden;
+        overflow-y: auto;
+
+        &__product {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background-color: #F9FAFB;
+
+            &__details {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                &__delete {
+                    padding: 8px;
+                    background-color: #9c2f27;
+                    border: unset;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    color: #fff;
+                    font-size: 16px;
+                    font-weight: 500;
+                    width: -webkit-fill-available;
+                }
+            }
+        }
+    }
+}

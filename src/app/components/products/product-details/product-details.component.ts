@@ -11,11 +11,13 @@ import {
   selectProduct,
 } from '../../../store/product/product.selectors';
 import * as ProductActions from '../../../store/product/product.actions';
+import { FormsModule } from '@angular/forms';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [NgOptimizedImage, AsyncPipe],
+  imports: [NgOptimizedImage, AsyncPipe, FormsModule],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
 })
@@ -24,13 +26,15 @@ export class ProductDetailsComponent implements OnDestroy {
   categories$: Observable<Category[] | null>;
 
   selectedImage!: string | undefined;
+  quantity: number = 1;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private cartService: CartService
   ) {
     this.product$ = this.store.select(selectProduct);
     this.categories$ = this.store.select(selectCategories);
@@ -72,6 +76,10 @@ export class ProductDetailsComponent implements OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  addToCart(product: Product) {
+    this.cartService.addToCart(product, this.quantity);
   }
 
   ngOnDestroy(): void {

@@ -52,9 +52,9 @@
             <div class="product__details__submit">
                 <div class="product__details__submit__qty">
                     <p>QTY</p>
-                    <input type="number" min="1" value="1">
+                    <input type="number" min="1" [(ngModel)]="quantity">
                 </div>
-                <button class="product__details__submit__add-to-cart">Add To Cart</button>
+                <button class="product__details__submit__add-to-cart" (click)="addToCart(product)">Add To Cart</button>
             </div>
         </div>
 

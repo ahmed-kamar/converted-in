@@ -4,21 +4,20 @@ import { BreadcrumbComponent } from './core/components/breadcrumb/breadcrumb.com
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as ProductActions from './store/product/product.actions';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, BreadcrumbComponent],
+  imports: [RouterOutlet, HeaderComponent, BreadcrumbComponent, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(ProductActions.loadProducts());
     this.store.dispatch(ProductActions.loadCategories());
   }
-
 }
