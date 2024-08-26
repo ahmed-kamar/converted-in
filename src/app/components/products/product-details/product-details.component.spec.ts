@@ -16,13 +16,10 @@ describe('ProductDetailsComponent - getProduct', () => {
   const setupTestBed = (paramMapValue: any) => {
     TestBed.configureTestingModule({
       imports: [
-        RouterModule.forRoot([]),
-        StoreModule.forRoot({}),
         ProductDetailsComponent,
       ],
       providers: [
         provideMockStore(),
-        CartService,
         MessageService,
         {
           provide: ActivatedRoute,
